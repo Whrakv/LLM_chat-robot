@@ -1,0 +1,3 @@
+使用之前输入npm i下载依赖
+然后node server.js即可
+WS通信Public内已有示例

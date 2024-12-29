@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		  <meta charset="UTF-8">
+		    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		      <title>Gemini--双子星</title>
+		        <link rel="stylesheet" href="./styles.css">
+			  <style>
+    body {
+	          padding: 20px;
+		      }
+      </style>
+	</head>
+	<body>
+
+		<div class="container">
+			  <div class="row">
+				      <div class="col-md-6">
+					            <div class="form-group">
+							            <label for="input">你的消息：</label>
+								            <textarea class="form-control" id="input" rows="4" cols="50"></textarea>
+									          </div>
+										        <button class="btn btn-primary" onclick="sendMessage()">发送消息</button>
+											    </div>
+											        <div class="col-md-6">
+													      <div class="card">
+														              <div class="card-header">服务器回复：</div>
+															              <div class="card-body" id="output" style="white-space: pre-wrap;"></div>
+																            </div>
+																	        </div>
+																		  </div>
+		</div>
+
+		<script>
+			  const ws = new WebSocket('ws://38.6.175.228:3000');
+
+			  ws.onmessage = function (event) {
+							      const outputDiv = document.getElementById('output');
+							      const message = event.data;
+
+							      // 追加新消息到现有输出
+							      outputDiv.innerHTML += message;
+
+							      // 滚动到底部以确保用户看到最新的消息
+							      outputDiv.scrollTop = outputDiv.scrollHeight;
+							    };
+
+			  ws.onclose = function () {
+							      console.log('连接已关闭');
+							    };
+
+			  function sendMessage() {
+							      const inputField = document.getElementById('input');
+							      const message = inputField.value;
+
+							      if (message.trim() !== '') {
+											            ws.send(JSON.stringify({ prompt: message, imageParts: [] }));
+											            inputField.value = '';
+											          }
+							    }
+		</script>
+
+	</body>
+</html>
+
